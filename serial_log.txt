@@ -1,0 +1,15 @@
+sensor=3723,button=0,led=OFF
+sensor=3680,button=0,led=OFF
+sensor=3612,button=0,led=OFF
+sensor=3495,button=1,led=ON
+sensor=3378,button=1,led=ON
+sensor=3204,button=1,led=ON
+sensor=3011,button=0,led=OFF
+sensor=2820,button=0,led=OFF
+sensor=2598,button=0,led=OFF
+sensor=2385,button=1,led=ON
+sensor=2140,button=1,led=ON
+sensor=1876,button=1,led=ON
+sensor=1542,button=0,led=OFF
+sensor=980,button=0,led=OFF
+sensor=412,button=1,led=ON
