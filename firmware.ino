@@ -85,6 +85,9 @@ const int BUTTON_PIN = 25;
 const int LED_PIN = 26;
 const int SENSOR_PIN = 34;
 
+int sensorValue;
+int buttonValue;
+
 void setup_pins()
 {
   pinMode(BUTTON_PIN, INPUT_PULLDOWN);
@@ -92,44 +95,42 @@ void setup_pins()
   pinMode(SENSOR_PIN, INPUT);
 }
 
-int read_sensor()
+void read_sensor()
 {
-  return analogRead(SENSOR_PIN);
+  sensorValue = analogRead(SENSOR_PIN);
+  buttonValue = digitalRead(BUTTON_PIN);
 }
 
-int get_blink_delay(int sensorValue)
+void update_led()
 {
-  return map(sensorValue, 0, 4095, 1000, 100);
-}
-
-void update_led(int sensorValue, int buttonValue)
-{
-  int blinkDelay = get_blink_delay(sensorValue);
-
   if (buttonValue == HIGH)
   {
     digitalWrite(LED_PIN, HIGH);
-    delay(blinkDelay);
-
-    digitalWrite(LED_PIN, LOW);
-    delay(blinkDelay);
   }
   else
   {
     digitalWrite(LED_PIN, LOW);
-    delay(100);
   }
 }
 
-void print_status(int sensorValue, int buttonValue)
+void send_serial()
 {
-  Serial.print("{\"sensor\":");
+  Serial.print("sensor=");
   Serial.print(sensorValue);
-  Serial.print(",\"button\":");
-  Serial.print(buttonValue == HIGH ? "true" : "false");
-  Serial.print(",\"blink_delay_ms\":");
-  Serial.print(get_blink_delay(sensorValue));
-  Serial.println("}");
+
+  Serial.print(",button=");
+  Serial.print(buttonValue);
+
+  Serial.print(",led=");
+
+  if (buttonValue == HIGH)
+  {
+    Serial.println("ON");
+  }
+  else
+  {
+    Serial.println("OFF");
+  }
 }
 
 void setup()
@@ -140,9 +141,9 @@ void setup()
 
 void loop()
 {
-  int sensorValue = read_sensor();
-  int buttonValue = digitalRead(BUTTON_PIN);
+  read_sensor();
+  update_led();
+  send_serial();
 
-  print_status(sensorValue, buttonValue);
-  update_led(sensorValue, buttonValue);
+  delay(1000);
 }
